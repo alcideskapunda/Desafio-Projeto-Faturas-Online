@@ -1,0 +1,33 @@
+# version: '3.8'
+
+services:
+  db:
+    image: postgres
+    container_name: postgres_container
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${USERNAME}
+      - POSTGRES_PASSWORD=${PASSWORD}
+      - POSTGRES_DB=${DATABASE}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: faturas_app
+    env_file:
+      - .env
+    ports:
+      - "${PORT}:${PORT}"
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    command: sh -c "npm run dev"
+
+volumes:
+  pgdata:
