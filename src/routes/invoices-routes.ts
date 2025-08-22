@@ -5,6 +5,6 @@ const routes = Router()
 const controller = new InvoicesController()
 
 routes.post("/", controller.create)
-
+routes.get("/", controller.findAll)
 
 export default routes;
