@@ -5,6 +5,13 @@ import { v4 as uuid } from "uuid";
 
 
 export class InvoicesService {
+    async findAll(): Promise<CreateInvoiceDTO[]> {
+        return await invoiceRepository.find()
+    }
+
+    async findOne(id: string): Promise<CreateInvoiceDTO | null> {
+        return await invoiceRepository.findOne({ where: { id }})
+    }
     
     async create(data: Omit<CreateInvoiceDTO, "id" | "issueDate">): Promise<CreateInvoiceDTO> {
         const { customer, value, dueDate, status } = data
