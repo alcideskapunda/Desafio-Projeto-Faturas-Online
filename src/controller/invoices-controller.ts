@@ -23,5 +23,16 @@ export class InvoicesController {
         }
     }
 
-    
+    async findAll(request: Request, response: Response) {
+        
+        try {
+            const invoices = await service.findAll()
+            response.status(StatusCodes.OK).json({ data: invoices })
+        } catch (error) {
+            if (error instanceof Error) {
+                response.status(StatusCodes.BAD_REQUEST).json({ message: error.message })
+                return
+            }
+        }
+    }
 }
