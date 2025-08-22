@@ -1,8 +1,17 @@
 import "dotenv/config"
+import 'reflect-metadata';
 import { app } from "./app";
+import { AppDataSource } from "./data-source";
 
-const port = process.env.PORT;
+async function main() {
+    await AppDataSource.initialize();
+    console.log("DataSource initialized");
 
-app.listen(port, () => {
-    console.log(`app runnig at port:${port}`);
-})
+    const port = process.env.PORT;
+
+    app.listen(port, () => {
+        console.log(`app runnig at port:${port}`);
+    })
+}
+
+main()
