@@ -1,5 +1,6 @@
 import { invoiceRepository } from "../database/repository/invoices-repository";
 import { CreateInvoiceDTO } from "../DTO/create-invoices-DTO";
+import { UpdateInvoiceDTO } from "../DTO/update-invoices-DTO";
 import { currentDate } from "../util/date";
 import { v4 as uuid } from "uuid";
 
@@ -35,6 +36,13 @@ export class InvoicesService {
         }
 
         return await invoiceRepository.save(body)
+    }
+
+    async update(id: string, data: Partial<UpdateInvoiceDTO>) {
+        const invoice =  await invoiceRepository.findOne({ where: { id }})
+        if(!invoice) throw new Error("fatura não encontrada");
+
+        return await invoiceRepository.update(id, data)
     }
 
     async remove(id: string) {
