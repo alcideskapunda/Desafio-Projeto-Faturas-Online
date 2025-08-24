@@ -6,11 +6,18 @@ import { v4 as uuid } from "uuid";
 
 export class InvoicesService {
     async findAll(): Promise<CreateInvoiceDTO[]> {
-        return await invoiceRepository.find()
+        const invoices = await invoiceRepository.find()
+        if (invoices.length === 0) throw new Error("Nenhuma fatura encontrada!");
+
+        return invoices
     }
 
     async findOne(id: string): Promise<CreateInvoiceDTO | null> {
-        return await invoiceRepository.findOne({ where: { id }})
+        if (id === undefined) throw new Error("Id indefinido");
+        
+        const invoice =  await invoiceRepository.findOne({ where: { id }})
+        if(!invoice) throw new Error("fatura não encontrada");
+        return invoice
     }
     
     async create(data: Omit<CreateInvoiceDTO, "id" | "issueDate">): Promise<CreateInvoiceDTO> {
@@ -28,6 +35,13 @@ export class InvoicesService {
         }
 
         return await invoiceRepository.save(body)
+    }
+
+    async remove(id: string) {
+        const invoice =  await invoiceRepository.findOne({ where: { id }})
+        if(!invoice) throw new Error("fatura não encontrada");
+        
+        return await invoiceRepository.delete(id)
     }
 }
 
