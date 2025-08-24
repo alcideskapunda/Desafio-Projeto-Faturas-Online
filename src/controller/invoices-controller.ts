@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CreateInvoiceDTO } from "../DTO/create-invoices-DTO";
 import { InvoicesService } from "../service/invoices-service";
 import { StatusCodes } from "http-status-codes";
+import { UpdateInvoiceDTO } from "../DTO/update-invoices-DTO";
 
 const service = new InvoicesService()
 
@@ -42,6 +43,21 @@ export class InvoicesController {
         try {
             const invoice = await service.findOne(id)
             response.status(StatusCodes.OK).json({ data: invoice })
+        } catch (error) {
+            if (error instanceof Error) {
+                response.status(StatusCodes.NOT_FOUND).json({ message: error.message })
+                return
+            }
+        }
+    }
+
+    async update(request: Request, response: Response) {
+        const { id } = request.params
+        const data: Partial<UpdateInvoiceDTO> = request.body
+
+        try {
+            await service.update(id, data)
+            response.status(StatusCodes.OK).json({ message: "field updated successfully!" })
         } catch (error) {
             if (error instanceof Error) {
                 response.status(StatusCodes.NOT_FOUND).json({ message: error.message })
