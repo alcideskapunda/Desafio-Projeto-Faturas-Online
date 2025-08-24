@@ -6,5 +6,7 @@ const controller = new InvoicesController()
 
 routes.post("/", controller.create)
 routes.get("/", controller.findAll)
+routes.get("/:id", controller.findOne)
+routes.delete("/:id", controller.remove)
 
 export default routes;
