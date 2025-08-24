@@ -23,11 +23,39 @@ export class InvoicesController {
         }
     }
 
-    async findAll(request: Request, response: Response) {
+    async findAll(_request: Request, response: Response) {
         
         try {
             const invoices = await service.findAll()
             response.status(StatusCodes.OK).json({ data: invoices })
+        } catch (error) {
+            if (error instanceof Error) {
+                response.status(StatusCodes.NO_CONTENT).json({ message: error.message })
+                return
+            }
+        }
+    }
+
+    async findOne(request: Request, response: Response) {
+        const { id } = request.params
+        
+        try {
+            const invoice = await service.findOne(id)
+            response.status(StatusCodes.OK).json({ data: invoice })
+        } catch (error) {
+            if (error instanceof Error) {
+                response.status(StatusCodes.NOT_FOUND).json({ message: error.message })
+                return
+            }
+        }
+    }
+
+    async remove(request: Request, response: Response) {
+        const { id } = request.params
+
+        try {
+            await service.remove(id)
+            response.status(StatusCodes.NO_CONTENT).json({ message: "Removed sussesfull" })
         } catch (error) {
             if (error instanceof Error) {
                 response.status(StatusCodes.BAD_REQUEST).json({ message: error.message })
