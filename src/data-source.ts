@@ -5,7 +5,7 @@ import { Invoices } from "./database/entitie/Invoices";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    host: process.env.DEVELOPMENT,
+    host: process.env.DB_HOST,
     port: 5432,
     username: process.env.USERNAME,
     password: process.env.PASSWORD,
